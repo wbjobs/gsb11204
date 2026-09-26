@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>无后端多租户配置中心</title>
+    <link rel="stylesheet" href="styles/app.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">IndexedDB · BroadcastChannel · Web Worker</p>
+        <h1>多租户配置中心</h1>
+      </div>
+      <div class="status" id="workerStatus">Worker 启动中…</div>
+    </header>
+
+    <main class="layout">
+      <aside class="sidebar card">
+        <div class="section-title">
+          <h2>租户</h2>
+          <span id="tenantCount"></span>
+        </div>
+        <div id="tenantList" class="tenant-list"></div>
+
+        <form id="tenantForm" class="tenant-form">
+          <h3>新建租户</h3>
+          <label>
+            租户 ID
+            <input id="newTenantId" placeholder="例如 eu" required>
+          </label>
+          <label>
+            名称
+            <input id="newTenantName" placeholder="例如 欧洲区" required>
+          </label>
+          <label>
+            继承自
+            <select id="newTenantParent"></select>
+          </label>
+          <button type="submit">创建租户</button>
+        </form>
+      </aside>
+
+      <section class="workspace">
+        <div class="card chain-card">
+          <div>
+            <p class="eyebrow">当前租户</p>
+            <h2 id="currentTenantName">-</h2>
+          </div>
+          <div>
+            <p class="eyebrow">继承链（根 → 当前）</p>
+            <div id="inheritanceChain" class="chain"></div>
+          </div>
+        </div>
+
+        <div id="hotBanner" class="banner hidden"></div>
+
+        <div class="grid">
+          <section class="card editor-card">
+            <div class="section-title">
+              <h2>租户覆盖配置</h2>
+              <span id="editorVersion"></span>
+            </div>
+            <p class="hint">这里只保存当前租户自己的覆盖项；对象会与父级深度合并，叶子值覆盖父级。</p>
+            <textarea id="configEditor" spellcheck="false"></textarea>
+            <div id="validation" class="validation"></div>
+            <div class="toolbar">
+              <input id="revisionMessage" placeholder="版本说明，例如：调整品牌色">
+              <button id="formatButton" type="button" class="secondary">格式化</button>
+              <button id="resetButton" type="button" class="secondary">重置草稿</button>
+              <button id="saveButton" type="button">发布新版本</button>
+            </div>
+          </section>
+
+          <section class="card effective-card">
+            <div class="section-title">
+              <h2>生效预览</h2>
+              <span id="previewMode"></span>
+            </div>
+            <pre id="effectivePreview"></pre>
+            <h3>值来源</h3>
+            <div id="sourceTable" class="source-table"></div>
+          </section>
+        </div>
+
+        <section id="conflictPanel" class="card conflict hidden">
+          <div class="section-title">
+            <h2>发布冲突</h2>
+            <button id="dismissConflict" type="button" class="secondary">关闭</button>
+          </div>
+          <p class="hint">你基于旧版本修改，而其他标签页已经发布新版本。可载入远端、自动合并非冲突字段，或强制覆盖。</p>
+          <div id="conflictList"></div>
+          <div class="toolbar">
+            <button id="loadRemoteButton" type="button" class="secondary">载入远端版本</button>
+            <button id="mergeButton" type="button">自动合并</button>
+            <button id="forceButton" type="button" class="danger">强制覆盖</button>
+          </div>
+        </section>
+
+        <section class="card history-card">
+          <div class="section-title">
+            <h2>版本历史与回滚</h2>
+            <span>回滚会追加新版本，不删除历史</span>
+          </div>
+          <div id="historyList" class="history-list"></div>
+        </section>
+      </section>
+    </main>
+
+    <div id="toast" class="toast hidden"></div>
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
