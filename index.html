@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>配置中心 · 多租户</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header>
+    <h1>配置中心</h1>
+    <div class="tenant-bar">
+      <label>当前租户</label>
+      <select id="tenantSelect"></select>
+      <span id="chainBadge" class="chain-badge"></span>
+    </div>
+    <a class="test-link" href="test.html" target="_blank">运行验收测试 →</a>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2>生效配置 <span class="hint">（继承链合并结果，可编辑当前租户覆盖）</span></h2>
+      <table id="configTable">
+        <thead>
+          <tr><th>键</th><th>生效值</th><th>来源层</th><th>当前租户覆盖</th><th>操作</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div class="add-row">
+        <input id="newKey" placeholder="新键，如 ui.theme" />
+        <input id="newValue" placeholder='值（JSON，如 "dark" 或 42）' />
+        <button id="addBtn">新增 / 覆盖</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>版本历史 <span class="hint">（当前租户，可回滚）</span></h2>
+      <ul id="historyList" class="history"></ul>
+    </section>
+
+    <section class="panel">
+      <h2>冲突检测</h2>
+      <p class="hint">模拟两个客户端同时修改：先读取版本 vN，另一客户端提交后，本客户端再基于 vN 提交会被拒绝。</p>
+      <button id="conflictBtn">模拟一次过期写入</button>
+      <pre id="conflictOut" class="log"></pre>
+    </section>
+
+    <section class="panel">
+      <h2>事件日志 <span class="hint">（热更新：在另一个标签页打开本页并修改配置，此处即时刷新）</span></h2>
+      <pre id="eventLog" class="log"></pre>
+    </section>
+  </main>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
